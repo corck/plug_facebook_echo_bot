@@ -1,20 +1,28 @@
-# PlugTest
+# Ex Plug Echo Bot [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+Ex Echo Bot is an example of a facebook messenger bot that echos whats sent to it.
 
-**TODO: Add description**
+# Usage
+The easist way is using Heroku deploy button (from above).
 
-## Installation
+Or manually, to start your plug app:
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+```
+mix deps.get
+PORT=8080 PAGE_TOKEN="FB_PAGE_TOKEN" VERIFY_TOKEN="FB_VERIFY_TOKEN" mix run --no-halt
+```
 
-  1. Add plug_test to your list of dependencies in `mix.exs`:
+Now you can visit [`localhost:8080`](http://localhost:8080) from your browser.
 
-        def deps do
-          [{:plug_test, "~> 0.0.1"}]
-        end
+The webhook api endpoint is at:
+`https://your_url/messenger/webhook`
 
-  2. Ensure plug_test is started before your application:
+# Configurations
+When starting it in production, you need to set the following environment varibles
 
-        def application do
-          [applications: [:plug_test]]
-        end
+`VERIFY_TOKEN` the facebook verification token that will be sent in the facebook challenge.
+`PAGE_TOKEN` the facebook page token you will use with your app.
+`PORT` the port to start it on
 
+To get the `VERIFY_TOKEN` and `PAGE_TOKEN` follow the instructions [here ](https://developers.facebook.com/docs/messenger-platform/quickstart)
+
+This project uses [EXFacebook-Messenger](https://github.com/oarrabi/EXFacebook-Messenger) as a dependency to create the chat bot.

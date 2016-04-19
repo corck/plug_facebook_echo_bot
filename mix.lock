@@ -1,6 +1,6 @@
 %{"cowboy": {:hex, :cowboy, "1.0.4"},
   "cowlib": {:hex, :cowlib, "1.0.2"},
-  "facebook_messenger": {:git, "https://github.com/oarrabi/ExFacebook-Messenger.git", "fdd47eb66edfbe03ca67c8d0f86eae7663fb3994", []},
+  "facebook_messenger": {:hex, :facebook_messenger, "0.2.0"},
   "httpotion": {:hex, :httpotion, "2.2.2"},
   "ibrowse": {:hex, :ibrowse, "4.2.2"},
   "plug": {:hex, :plug, "1.1.3"},

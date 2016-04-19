@@ -1,4 +1,4 @@
-# Ex Plug Echo Bot [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+# Plug facebook echo bot [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 Ex Echo Bot is an example of a facebook messenger bot that echos whats sent to it.
 
 # Usage
@@ -25,4 +25,4 @@ When starting it in production, you need to set the following environment varibl
 
 To get the `VERIFY_TOKEN` and `PAGE_TOKEN` follow the instructions [here ](https://developers.facebook.com/docs/messenger-platform/quickstart)
 
-This project uses [EXFacebook-Messenger](https://github.com/oarrabi/EXFacebook-Messenger) as a dependency to create the chat bot.
+This project uses [EXFacebookMessenger](https://github.com/oarrabi/facebook_messenger) as a dependency to create the chat bot.

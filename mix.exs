@@ -12,7 +12,6 @@ defmodule Sample.Mixfile do
 
   def application do
     [applications: [:logger, :plug, :cowboy, :facebook_messenger],
-     env: [server_port: System.get_env("PORT") || 8080],
      mod: {Sample.Server, []}]
   end
 

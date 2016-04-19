@@ -17,7 +17,7 @@ defmodule Sample.Mixfile do
   end
 
   defp deps do
-    [{:facebook_messenger, "> 0.1.0", path: "../facebook_messenger"},
+    [{:facebook_messenger, ">= 0.2.0", github: "oarrabi/ExFacebook-Messenger"},
      {:plug, "> 0.0.0"},
      {:cowboy, "> 0.0.0"}]
   end

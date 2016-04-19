@@ -1,0 +1,28 @@
+{
+  "name": "Elixir plug facebook chat echo bot",
+  "description": "An elixir plug facebook chat echo bot, built with `facebook_messenger` hex library",
+  "repository": "https://github.com/oarrabi/ex-plug-echo-bot",
+  "logo": "https://d.ibtimes.co.uk/en/full/1469154/facebook-messenger.jpg?w=400",
+  "keywords": [
+    "elixir",
+    "facebook",
+    "plug",
+    "messenger",
+    "bot"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/HashNuke/heroku-buildpack-elixir.git"
+    }
+  ],
+  "env": {
+    "PAGE_TOKEN": {
+      "description": "The facebook page token",
+      "value": "PAGE_TOKEN"
+    },
+    "VERIFY_TOKEN": {
+      "description": "The facebook verify token",
+      "value": "VERIFY_TOKEN"
+    }
+  }
+}

@@ -11,13 +11,14 @@ defmodule Sample.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :plug, :cowboy],
-     env: [server_port: 8080],
+    [applications: [:logger, :plug, :cowboy, :facebook_messenger],
+     env: [server_port: System.get_env("PORT") || 8080],
      mod: {Sample.Server, []}]
   end
 
   defp deps do
-    [{:plug, "> 0.0.0"},
+    [{:facebook_messenger, "> 0.1.0", path: "../facebook_messenger"},
+     {:plug, "> 0.0.0"},
      {:cowboy, "> 0.0.0"}]
   end
 end

@@ -1,14 +1,10 @@
 defmodule Sample.Router do
   use Plug.Router
 
-  plug Plug.Logger, level: :info
-
-  # plug Sample.Plug
-
+  plug Plug.Logger
   plug :match
   plug :dispatch
 
-  get "/hello", do: send_resp(conn, 200, "world")
-
+  forward "/messenger/webhook", to: FacebookMessenger.Router
   match _, do: send_resp(conn, 500, "error")
 end

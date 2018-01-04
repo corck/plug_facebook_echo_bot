@@ -4,7 +4,7 @@ defmodule Sample.Mixfile do
   def project do
     [app: :plug_sample,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.5",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -16,7 +16,7 @@ defmodule Sample.Mixfile do
   end
 
   defp deps do
-    [{:facebook_messenger, ">= 0.2.0"},
+    [{:facebook_messenger, ">= 0.3.0"},
      {:plug, "> 0.0.0"},
      {:cowboy, "> 0.0.0"}]
   end

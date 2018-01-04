@@ -5,7 +5,7 @@ defmodule Sample.Router do
   plug :match
   plug :dispatch
 
-  forward "/messenger/webhook",
+  forward "/webhook",
     to: FacebookMessenger.Router,
     message_received: &Sample.Router.message/1
 

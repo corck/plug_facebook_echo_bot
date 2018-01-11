@@ -16,7 +16,7 @@ defmodule Sample.Mixfile do
   end
 
   defp deps do
-    [{:facebook_messenger, ">= 0.3.0"},
+    [{:facebook_messenger, git: "https://github.com/corck/facebook_messenger.git", branch: "broadcast-functionality"},
      {:plug, "> 0.0.0"},
      {:cowboy, "> 0.0.0"}]
   end

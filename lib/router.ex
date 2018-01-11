@@ -13,10 +13,13 @@ defmodule Sample.Router do
 
   get("/broadcast") do
     conn = fetch_query_params(conn) # get parameters
-    %{ "message" => message } = conn.params
-    recipient_id = "1629070620483444" # hard coded recipient id
-    FacebookMessenger.Sender.send(recipient_id, message)
-    send_resp(conn, 200, "Sent message #{message}")
+    %{ "height" => height } = conn.params
+
+    {h, _} = Float.parse(height)
+    Logger.info(inspect(h))
+    broadcast(h)
+
+    send_resp(conn, 200, "Sent message")
   end
 
   match _, do: send_resp(conn, 500, "error")
@@ -27,5 +30,25 @@ defmodule Sample.Router do
     Logger.info(sender)
     FacebookMessenger.Sender.send(sender, text)
     send(self, 3)
+  end
+
+  def broadcast(height) when is_float(height) and height > 3.5 do
+    message = "Die Furt ist gesperrt"
+    FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "NO_PUSH")
+  end
+
+  def broadcast(height) when is_float(height) and height > 3.0 do
+    message = "Die Furt wird bald geschlossen sein"
+    FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "NO_PUSH")
+  end
+
+  def broadcast(height) when is_float(height) and height < 3.0 do
+    message = "Die Furt wird bald wieder offen sein"
+    FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "NO_PUSH")
+  end
+
+  def broadcast(height) do
+    message = "Die Furt hat einen Höhenstand von #{inspect(height)}"
+    FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "NO_PUSH")
   end
 end

@@ -34,7 +34,7 @@ defmodule Sample.Router do
 
   def broadcast(height) when is_float(height) and height > 3.5 do
     message = "Die Furt ist gesperrt"
-    FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "NO_PUSH")
+    FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "REGULAR")
   end
 
   def broadcast(height) when is_float(height) and height > 3.0 do

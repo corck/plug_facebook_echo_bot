@@ -1,3 +1,16 @@
+# Start server
+
+    # export keys
+    export ACCESS_TOKEN='XXXX'
+    export VERIFY_TOKEN='XXXXX'
+    # start server
+    PORT=5000 mix run --no-halt
+
+## route to localhost through ngrok
+
+    ngrok http 5000 
+
+
 ```
 curl -X POST -H "Content-Type: application/json" -d '{
   "messaging_type": "NON_PROMOTIONAL_SUBSCRIPTION",

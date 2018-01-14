@@ -1,6 +1,6 @@
 defmodule Sample.Broadcast do
   def broadcast(height) when is_float(height) and height > 3.5 do
-    message = "Die Furt ist gesperrt"
+    message = "Die Furt ist gesperrt. Höhe: #{inspect height}"
     FacebookMessenger.Sender.text_broadcast(message, "TRANSPORTATION_UPDATE", "REGULAR")
   end
 

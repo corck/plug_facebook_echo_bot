@@ -3,6 +3,9 @@ defmodule Sample.Router do
   import Plug.Conn
   use Plug.Router
   require Logger
+  plug Plug.Parsers, parsers: [:json],
+                     pass:  ["text/*"],
+                     json_decoder: Poison
 
   plug Plug.Logger, log: :debug
   plug :match
@@ -12,13 +15,23 @@ defmodule Sample.Router do
     to: FacebookMessenger.Router,
     message_received: &Sample.Router.message/1
 
-  get("/broadcast") do
+  # TTN Payload
+  # %{"app_id" => "citymonitor", "counter" => 32, "dev_id" => "furt_pegel",
+  #  "downlink_url" => "https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/citymonitor/furt_bot_hook?key=ttn-account-v2.AluPspgSKXmpvKmWDYbgXDD1IrUUKiDbqvmlnq0Tc4Q", "hardware_serial" => "00D5F9475ACE563A", "metadata" => %{"coding_rate" => "4/5", "data_rate" => "SF7BW125", "frequency" => 867.9, "gateways" => [%{"channel" => 7, "gtw_id" => "eui-9d4004f0211748e3", "rf_chain" => 0, "rssi" => -119, "snr" => -3, "time" => "2018-01-14T21:30:06.123698Z", "timestamp" => 782921484}],
+  #  "modulation" => "LORA", "time" => "2018-01-14T21:30:06.163355109Z"},
+  # "payload_raw" => "AAU=", "port" => 1}
+  #
+  #   "AAY=" |> Base.decode64! |> :binary.decode_unsigned
+  post("/broadcast") do
     conn = fetch_query_params(conn) # get parameters
-    %{ "height" => height } = conn.params
-
-    {h, _} = Float.parse(height)
-
-    Broadcast.broadcast(h)
+    Logger.debug(inspect(conn))
+    Logger.debug(inspect(conn.params))
+    Logger.debug(inspect(conn.body_params))
+    payload = conn.body_params["payload_raw"]
+    height = payload |> Base.decode64! |> :binary.decode_unsigned
+    #    %{ "height" => height } = conn.params
+    #
+    Broadcast.broadcast(height)
 
     send_resp(conn, 200, "Sent message")
   end

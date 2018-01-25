@@ -1,5 +1,5 @@
 defmodule Sample.Router do
-  alias Sample.{Broadcast}
+  alias Sample.{Waterlevel}
   import Plug.Conn
   use Plug.Router
   require Logger
@@ -24,14 +24,11 @@ defmodule Sample.Router do
   #   "AAY=" |> Base.decode64! |> :binary.decode_unsigned
   post("/broadcast") do
     conn = fetch_query_params(conn) # get parameters
-    Logger.debug(inspect(conn))
-    Logger.debug(inspect(conn.params))
-    Logger.debug(inspect(conn.body_params))
-    payload = conn.body_params["payload_raw"]
+    payload = Map.get(conn.body_params, "payload_raw", 0)
     height = payload |> Base.decode64! |> :binary.decode_unsigned
-    #    %{ "height" => height } = conn.params
-    #
-    Broadcast.broadcast(height)
+
+#    Broadcast.broadcast(height)
+    Waterlevel.new_height(:furt, height)
 
     send_resp(conn, 200, "Sent message")
   end

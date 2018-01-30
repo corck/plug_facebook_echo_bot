@@ -28,7 +28,7 @@ defmodule Sample.Router do
     height = payload |> Base.decode64! |> :binary.decode_unsigned
 
 #    Broadcast.broadcast(height)
-    Waterlevel.new_height(:furt, height)
+    Waterlevel.new_height(height)
 
     send_resp(conn, 200, "Sent message")
   end

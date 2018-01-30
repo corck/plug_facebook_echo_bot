@@ -6,6 +6,10 @@ defmodule Sample.Waterlevel do
   defstruct waterlevel: 0,
             state: :initialized
 
+  defguard alert_level(height) when height >= 3.5
+  defguard warn_level(height) when height < 3.5 and height >= 3.0
+  defguard below_warn_level(height) when height < 3.0
+
   def new(), do: %Waterlevel{}
 
   def start_link(state \\ []), do:
@@ -31,49 +35,50 @@ defmodule Sample.Waterlevel do
   end
 
   # flodded && alarm sent already
-  def check(%{state: :flodded} = state_data, height) when height > 3.5 do
+  def check(%{state: :flodded} = state_data, height) when alert_level(height) do
     %{state_data | state: :flodded, waterlevel: height}
   end
 
   # flodded
-  def check(%{state: :warned} = state_data, height) when height > 3.5 do
+  def check(%{state: :warned} = state_data, height) when alert_level(height) do
     message = "Die Furt ist gesperrt. Höhe: #{inspect height}"
     Sample.Broadcast.broadcast(message, "REGULAR")
     %{state_data | state: :flodded, waterlevel: height}
   end
 
   # not flodded anymore
-  def check(%{state: :flodded} = state_data, height) when height < 3.0 do
+  def check(%{state: :flodded} = state_data, height) when below_warn_level(height) do
     message = "Die Furt wird wahrscheinlich bald wieder offen sein. Höhe: #{inspect height}"
     Sample.Broadcast.broadcast(message, "REGULAR")
     %{state_data | state: :open, waterlevel: height}
   end
 
-  # soon flodded, already sent
-  def check(%{state: :warned} = state_data, height) when height > 3.0 do
+  # warned, already sent
+  def check(%{state: :warned} = state_data, height) when warn_level(height) do
     %{state_data | state: :warned, waterlevel: height}
   end
 
+  # flodded, returns back to warn level to not alarm twice
+  def check(%{state: :flodded} = state_data, height) when warn_level(height) do
+    %{state_data | state: :normal, waterlevel: height}
+  end
+
   # notify soon flodded
-  def check(%{state: :normal} = state_data, height) when height >= 3.0 do
-    message = "Die Furt wird bald geschlossen sein"
+  def check(%{state: :normal} = state_data, height) when warn_level(height) do
+    message = "Die Furt wird vielleicht bald geschlossen sein"
     Sample.Broadcast.broadcast(message, "REGULAR")
     %{state_data | state: :warned, waterlevel: height}
   end
 
   # normal level
-  def check(%{state: _} = state_data, height) when height < 3.0 do
+  def check(%{state: _} = state_data, height) do
     %{state_data | state: :normal, waterlevel: height}
   end
 
-  def check(state, _action) do
-    IO.puts("Error #{state}")
+  def check(%{state: _} = state_data, _height) do
+    IO.puts("Error #{state_data[:state]}")
     state
   end
 
   defp reply_success(state_data, reply), do: {:reply, reply, state_data}
-
-  defp update_height(state_data, height) do
-    put_in(state_data.waterlevel, height)
-  end
 end

@@ -46,13 +46,6 @@ defmodule Sample.Waterlevel do
     %{state_data | state: :flodded, waterlevel: height}
   end
 
-  # not flodded anymore
-  def check(%{state: :flodded} = state_data, height) when below_warn_level(height) do
-    message = "Die Furt wird wahrscheinlich bald wieder offen sein. Höhe: #{inspect height}"
-    Sample.Broadcast.broadcast(message, "REGULAR")
-    %{state_data | state: :open, waterlevel: height}
-  end
-
   # warned, already sent
   def check(%{state: :warned} = state_data, height) when warn_level(height) do
     %{state_data | state: :warned, waterlevel: height}
@@ -60,7 +53,14 @@ defmodule Sample.Waterlevel do
 
   # flodded, returns back to warn level to not alarm twice
   def check(%{state: :flodded} = state_data, height) when warn_level(height) do
-    %{state_data | state: :normal, waterlevel: height}
+    message = "Die Furt wird wahrscheinlich bald wieder offen sein. Höhe: #{inspect height}"
+    Sample.Broadcast.broadcast(message, "REGULAR")
+    %{state_data | state: :level_drop, waterlevel: height}
+  end
+
+  # drop of waterlevel back to normal
+  def check(%{state: :level_drop} = state_data, height) when warn_level(height) do
+    %{state_data | state: :level_drop, waterlevel: height}
   end
 
   # notify soon flodded
@@ -77,7 +77,6 @@ defmodule Sample.Waterlevel do
 
   def check(%{state: _} = state_data, _height) do
     IO.puts("Error #{state_data[:state]}")
-    state
   end
 
   defp reply_success(state_data, reply), do: {:reply, reply, state_data}
